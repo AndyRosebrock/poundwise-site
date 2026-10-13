@@ -16,15 +16,47 @@
   p { font-size:17px; }
   .muted { color:var(--muted); font-size:15px; }
   a { color:var(--accent); }
+  .stores { display:flex; flex-wrap:wrap; gap:12px; margin:24px 0; }
+  .store { display:inline-block; padding:12px 20px; border-radius:12px; background:var(--accent);
+    color:#fff; font-weight:700; text-decoration:none; }
 </style>
 </head>
 <body>
 <main>
   <h1>Poundwise</h1>
   <p>A simple, private weight tracker. Log your weight, see your trend, and reach your goal.</p>
+  <div id="get">
+    <p>Poundwise is coming soon to the App Store and Google Play.</p>
+  </div>
   <p><a href="/privacy/">Privacy Policy</a></p>
   <p>Questions or support: <a href="mailto:poundwise@axeinc.com">poundwise@axeinc.com</a></p>
   <p class="muted">&copy; Axe Inc</p>
 </main>
+<script>
+  // Where "poundwise.axeinc.net" sends people. Poundwise's share card and celebration GIF print this
+  // address, so keep it working. Fill in each link when the listing goes live; until then visitors
+  // just see "coming soon".
+  //   ios:     https://apps.apple.com/app/idNNNNNNNNNN   (the number is the Apple ID in
+  //            App Store Connect > App Information)
+  //   android: https://play.google.com/store/apps/details?id=com.andyr.weighttracker
+  var STORES = { ios: '', android: '' };
+
+  (function () {
+    var ua = navigator.userAgent || '';
+    var isIos = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    var isAndroid = /Android/.test(ua);
+    var mine = isIos ? STORES.ios : isAndroid ? STORES.android : '';
+    // On a phone with a live listing, go straight there.
+    if (mine) { window.location.replace(mine); return; }
+
+    // Otherwise show whichever store buttons exist (both on a computer).
+    var buttons = [];
+    if (STORES.ios) buttons.push('<a class="store" href="' + STORES.ios + '">Get it on the App Store</a>');
+    if (STORES.android) buttons.push('<a class="store" href="' + STORES.android + '">Get it on Google Play</a>');
+    if (buttons.length) {
+      document.getElementById('get').innerHTML = '<div class="stores">' + buttons.join('') + '</div>';
+    }
+  })();
+</script>
 </body>
 </html>
